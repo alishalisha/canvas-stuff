@@ -13,7 +13,10 @@
   <body>
     <p>Canvas: Defaults to a center crop of the natural image.</p>
     <p><strong>Click around in here to load the image</strong></p>
-    <canvas id="canvas" width="800" height="600"></canvas>
+    <div class="dropzone" id="dropzone">Drop Image Here</div>
+    <div id="canvas-container">
+      <canvas id="canvas" width="800" height="600"></canvas>
+    </div>
     <p><a href="#" id="left-crop">Left crop?</a></p>
     <p>Todo: Add image upload and use that as the source</p>
     <script src="app.js"></script>

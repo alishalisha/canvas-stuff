@@ -8,10 +8,6 @@ image.onload = function() {
   imageHeight = this.naturalHeight;
 }
 
-document.onload = function() {
-  redraw();
-}
-
 $('#canvas').mousedown(function(e){
   var mouseX = e.pageX - this.offsetLeft;
   var mouseY = e.pageY - this.offsetTop;
@@ -45,6 +41,12 @@ var clickDrag = new Array();
 var paint;
 var canvasWidth = context.canvas.width;
 var canvasHeight = context.canvas.height;
+var containerWidth = document.getElementById("canvas-container").offsetWidth;
+var containerHeight = document.getElementById("canvas-container").offsetHeight;
+
+// this will make the canvas element responsive
+canvasWidth = containerWidth;
+canvasHeight = containerHeight;
 
 function addClick(x, y, dragging)
 {
@@ -65,23 +67,23 @@ function redraw(){
   // if the image width is greater than the height, the image width should be the destination width
   
   if (imageWidth > imageHeight) {
-    var dy = (600 - (800/aspectRatio))/2;
+    var dy = (canvasHeight - (canvasWidth/aspectRatio))/2;
     var dx = 0;
-    context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, 800, (800/aspectRatio));
+    context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, canvasWidth, (canvasHeight/aspectRatio));
     // take the remainder of 800/aspect ratio, divide it in half, and set the sy to that.
   } else {
-    var dx = (800 - (600*aspectRatio))/2;
+    var dx = (canvasWidth - (canvasHeight*aspectRatio))/2;
     var dy = 0;
-    context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, (600*aspectRatio), 600);
+    context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, (canvasHeight*aspectRatio), canvasHeight);
   }
   
     document.getElementById("left-crop").onclick = function() {
       var sx = 0;
       var sy = 0;
-      context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, (600*aspectRatio), 600);
+      context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, (canvasHeight*aspectRatio), canvasHeight);
     }
   
-  context.strokeStyle = "#df4b26";
+  context.strokeStyle = "yellow";
   context.lineJoin = "round";
   context.lineWidth = 5;
       
