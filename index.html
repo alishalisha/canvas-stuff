@@ -24,7 +24,8 @@
     <a href="#" class="controls__brushes-size" data-size="10">Large</a>
     </div>
     <div class="controls__scale">
-    Resize image
+    Resize image:
+     <input id="image-scale" type="range" max="4" min=".01" step=".01" value="1">
     </div>
     <div class="controls__colors">
       <a href="#" id="canvas-clear">Clear canvas</a>
@@ -33,8 +34,12 @@
     Download image
     </div>
 
-    <div class="controls__dropzone" id="dropzone">
+    <div class="controls__image">
       Drop Image Here
+    </div>
+    <div class="controls__image-upload">
+       or Upload Image:  <input type="file" id="upload" />
+       <div id="output"></div>
     </div>
 
     <div id="canvas-container">

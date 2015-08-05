@@ -21,11 +21,6 @@ canvasHeight = containerHeight;
 var image = new Image();
 image.src = "https://cdn0.vox-cdn.com/thumbor/l-aJK1tYUa6XazJiOStAgLOInEk=/0x0:2222x1667/1200x900/filters:format(webp)/cdn0.vox-cdn.com/uploads/chorus_image/image/46868926/DrielyS-5168.0.0.0.0.jpg";
 
-image.onload = function() {
-  imageWidth = this.naturalWidth;
-  imageHeight = this.naturalHeight;
-}
-
 // -------------------------------
 //
 // set up basic drawing functions
@@ -122,6 +117,10 @@ function clearCanvas(){
   console.log("clearing");
 }
 
+function resizeImage(){
+
+}
+
 // -------------------------------
 //
 // call tools functions
@@ -138,3 +137,35 @@ $('.controls__brushes-size').on('click', function() {
   $('.controls__brushes-size').removeClass('active-size');
   $(this).addClass('active-size');
 });
+
+$('#upload').on('change', function() {
+  console.log($(this).attr('src'));
+})
+
+// image uploading
+function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+    for (var i = 0, f; f = files[i]; i++) {
+      if (!f.type.match('image.*')) {
+        continue;
+      }
+      var reader = new FileReader();
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+          // Render thumbnail.
+          // Place it onto the canvas
+          console.log(context);
+          var span = document.createElement('span');
+          span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                            '" title="', escape(theFile.name), '"/>'].join('');
+          document.getElementById('output').insertBefore(span, null);
+        };
+      })(f);
+
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(f);
+    }
+  }
+
+  document.getElementById('upload').addEventListener('change', handleFileSelect, false);
