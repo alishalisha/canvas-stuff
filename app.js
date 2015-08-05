@@ -11,6 +11,9 @@ var canvasHeight = context.canvas.height;
 var containerWidth = document.getElementById("canvas-container").offsetWidth;
 var containerHeight = document.getElementById("canvas-container").offsetHeight;
 
+// default color of brush
+context.strokeStyle = "yellow";
+
 // this will make the canvas element responsive
 canvasWidth = containerWidth;
 canvasHeight = containerHeight;
@@ -59,10 +62,19 @@ $('#canvas').mouseleave(function(e){
 var clickX = new Array();
 var clickY = new Array();
 var clickDrag = new Array();
+var clickColor = new Array();
+var curColor = "purple";
 var paint;
+var colorTools = document.getElementsByClassName("controls__colors-color");
+var clearButton = document.getElementById("canvas-clear");
 
 function addClick(x, y, dragging)
 {
+  // update current color
+  var activeColor = document.getElementsByClassName("active-color")[0].dataset.color;
+  curColor = activeColor;
+
+  clickColor.push(curColor);
   clickX.push(x);
   clickY.push(y);
   clickDrag.push(dragging);
@@ -70,7 +82,6 @@ function addClick(x, y, dragging)
 
 function redraw(){
   context.clearRect(0, 0, canvasWidth, canvasHeight); // Clears the canvas
-  context.strokeStyle = "yellow";
   context.lineJoin = "round";
   context.lineWidth = 5;
       
@@ -84,6 +95,7 @@ function redraw(){
      context.lineTo(clickX[i], clickY[i]);
      context.closePath();
      context.stroke();
+     context.strokeStyle = clickColor[i];
   }
 }
 
@@ -92,7 +104,6 @@ function redraw(){
 // tools functions
 //
 // -------------------------------
-
 function clearCanvas(){
   context.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -109,6 +120,9 @@ function clearCanvas(){
 // call tools functions
 //
 // -------------------------------
+clearButton.onclick = clearCanvas;
 
-var clearButton = document.getElementById("canvas-clear");
-clearButton.onclick = function() { clearCanvas(); }
+$('.controls__colors-color').on('click', function() {
+  $('.controls__colors-color').removeClass('active-color');
+  $(this).addClass('active-color');
+});
