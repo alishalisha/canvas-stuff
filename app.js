@@ -81,7 +81,7 @@ function addClick(x, y, dragging)
   //curSize = activeSize;
 
   clickColor.push(curColor);
-  clickColor.push(curSize);
+  clickSize.push(curSize);
   clickX.push(x);
   clickY.push(y);
   clickDrag.push(dragging);
@@ -93,7 +93,7 @@ function redraw(){
       
   for(var i=0; i < clickX.length; i++) { 
     context.strokeStyle = clickColor[i];
-    context.lineWidth = curSize;   
+    context.lineWidth = clickSize[i];   
     context.beginPath();
     if(clickDrag[i] && i){
       context.moveTo(clickX[i-1], clickY[i-1]);
