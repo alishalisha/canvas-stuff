@@ -18,9 +18,6 @@ context.strokeStyle = "yellow";
 canvasWidth = containerWidth;
 canvasHeight = containerHeight;
 
-var image = new Image();
-image.src = "https://cdn0.vox-cdn.com/thumbor/l-aJK1tYUa6XazJiOStAgLOInEk=/0x0:2222x1667/1200x900/filters:format(webp)/cdn0.vox-cdn.com/uploads/chorus_image/image/46868926/DrielyS-5168.0.0.0.0.jpg";
-
 // -------------------------------
 //
 // set up basic drawing functions
@@ -55,6 +52,7 @@ $('#canvas').mouseleave(function(e){
   paint = false;
 });
 
+var image = new Image();
 var clickX = new Array();
 var clickY = new Array();
 var clickDrag = new Array();
@@ -85,6 +83,7 @@ function addClick(x, y, dragging)
 function redraw(){
   context.clearRect(0, 0, canvasWidth, canvasHeight); // Clears the canvas
   context.lineJoin = "round";
+  context.drawImage(image,0,0);
       
   for(var i=0; i < clickX.length; i++) { 
     context.strokeStyle = clickColor[i];
@@ -149,9 +148,7 @@ function previewFile() {
   var reader  = new FileReader();
 
   reader.onloadend = function () {
-    var image = new Image();
     image.src = reader.result;
-    console.log(image.src);
     context.drawImage(image,0,0);
   }
 
