@@ -35,8 +35,9 @@ image.onload = function() {
 $('#canvas').mousedown(function(e){
   var mouseX = e.pageX - this.offsetLeft;
   var mouseY = e.pageY - this.offsetTop;
-    
   paint = true;
+  curColor = document.getElementsByClassName("active-color")[0].dataset.color;
+  curSize = document.getElementsByClassName("active-size")[0].dataset.size;
   addClick(mouseX, mouseY);
   redraw();
 });
@@ -63,6 +64,8 @@ var clickX = new Array();
 var clickY = new Array();
 var clickDrag = new Array();
 var clickColor = new Array();
+var clickSize = new Array();
+var curSize = "medium";
 var curColor = "purple";
 var paint;
 var colorTools = document.getElementsByClassName("controls__colors-color");
@@ -71,10 +74,14 @@ var clearButton = document.getElementById("canvas-clear");
 function addClick(x, y, dragging)
 {
   // update current color
-  var activeColor = document.getElementsByClassName("active-color")[0].dataset.color;
-  curColor = activeColor;
+  //var activeColor = document.getElementsByClassName("active-color")[0].dataset.color;
+  //curColor = activeColor;
+
+  //var activeSize = document.getElementsByClassName("active-size")[0].dataset.size;
+  //curSize = activeSize;
 
   clickColor.push(curColor);
+  clickColor.push(curSize);
   clickX.push(x);
   clickY.push(y);
   clickDrag.push(dragging);
@@ -83,9 +90,10 @@ function addClick(x, y, dragging)
 function redraw(){
   context.clearRect(0, 0, canvasWidth, canvasHeight); // Clears the canvas
   context.lineJoin = "round";
-  context.lineWidth = 5;
       
-  for(var i=0; i < clickX.length; i++) {    
+  for(var i=0; i < clickX.length; i++) { 
+    context.strokeStyle = clickColor[i];
+    context.lineWidth = curSize;   
     context.beginPath();
     if(clickDrag[i] && i){
       context.moveTo(clickX[i-1], clickY[i-1]);
@@ -95,7 +103,6 @@ function redraw(){
      context.lineTo(clickX[i], clickY[i]);
      context.closePath();
      context.stroke();
-     context.strokeStyle = clickColor[i];
   }
 }
 
@@ -125,4 +132,9 @@ clearButton.onclick = clearCanvas;
 $('.controls__colors-color').on('click', function() {
   $('.controls__colors-color').removeClass('active-color');
   $(this).addClass('active-color');
+});
+
+$('.controls__brushes-size').on('click', function() {
+  $('.controls__brushes-size').removeClass('active-size');
+  $(this).addClass('active-size');
 });
