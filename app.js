@@ -143,29 +143,23 @@ $('#upload').on('change', function() {
 })
 
 // image uploading
-function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
-    for (var i = 0, f; f = files[i]; i++) {
-      if (!f.type.match('image.*')) {
-        continue;
-      }
-      var reader = new FileReader();
-      // Closure to capture the file information.
-      reader.onload = (function(theFile) {
-        return function(e) {
-          // Render thumbnail.
-          // Place it onto the canvas
-          console.log(context);
-          var span = document.createElement('span');
-          span.innerHTML = ['<img class="thumb" src="', e.target.result,
-                            '" title="', escape(theFile.name), '"/>'].join('');
-          document.getElementById('output').insertBefore(span, null);
-        };
-      })(f);
+function previewFile() {
+  var preview = document.querySelector('img');
+  var file    = document.querySelector('input[type=file]').files[0];
+  var reader  = new FileReader();
 
-      // Read in the image file as a data URL.
-      reader.readAsDataURL(f);
-    }
+  reader.onloadend = function () {
+    var image = new Image();
+    image.src = reader.result;
+    console.log(image.src);
+    context.drawImage(image,0,0);
   }
 
-  document.getElementById('upload').addEventListener('change', handleFileSelect, false);
+  if (file) {
+    reader.readAsDataURL(file);
+  } else {
+    preview.src = "";
+  }
+}
+
+document.getElementById('upload').addEventListener('change', previewFile, false);
