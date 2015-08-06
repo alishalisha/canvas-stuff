@@ -137,10 +137,6 @@ $('.controls__brushes-size').on('click', function() {
   $(this).addClass('active-size');
 });
 
-$('#upload').on('change', function() {
-  console.log($(this).attr('src'));
-})
-
 // image uploading
 function previewFile() {
   var preview = document.querySelector('img');
@@ -149,7 +145,7 @@ function previewFile() {
 
   reader.onloadend = function () {
     image.src = reader.result;
-    context.drawImage(image,0,0);
+    redraw();
   }
 
   if (file) {
@@ -160,3 +156,5 @@ function previewFile() {
 }
 
 document.getElementById('upload').addEventListener('change', previewFile, false);
+
+// todo: image fitting, resizing, dragging and dropping, refactoring, annnnnd other things maybe
