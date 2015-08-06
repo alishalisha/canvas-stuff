@@ -39,11 +39,12 @@ canvasHeight = containerHeight;
 
 $('#canvas').mousedown(function(e){
   if (imageStatus == 'editing') {
-    console.log('sorry you cannot edit rn. if you are happy with your image, click "set image" up there to start drawing on it.');
+    alert('Please upload an image and click "Set Image" first.')
+    //console.log('sorry you cannot edit rn. if you are happy with your image, click "set image" up there to start drawing on it.');
     return
   } else {
     console.log('status is SET');
-    var mouseX = (e.pageX - this.offsetLeft) - leftPanelWidth;
+    var mouseX = e.pageX - this.offsetLeft;
     var mouseY = e.pageY - this.offsetTop;
     paint = true;
     curColor = document.getElementsByClassName("active-color")[0].dataset.color;
@@ -68,7 +69,7 @@ will be disabled again and the drawing tools will be hidden again (or faded out?
 */
 
 $('#canvas').mousemove(function(e){
-  var mouseX = (e.pageX - this.offsetLeft) - leftPanelWidth;
+  var mouseX = e.pageX - this.offsetLeft;
   var mouseY = e.pageY - this.offsetTop;
   
   if(paint){

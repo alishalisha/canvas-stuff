@@ -50,7 +50,7 @@
 }
 
 #canvas-right {
-  position: relative;
+  /*position: relative;*/
   width: 683px;
   height: 590px;
   max-width: 100%;
