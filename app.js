@@ -8,8 +8,8 @@ context = document.getElementById('canvas').getContext("2d");
 
 var canvasWidth = context.canvas.width;
 var canvasHeight = context.canvas.height;
-var containerWidth = document.getElementById("canvas-container").offsetWidth;
-var containerHeight = document.getElementById("canvas-container").offsetHeight;
+var containerWidth = document.getElementById("canvas-right").offsetWidth;
+var containerHeight = document.getElementById("canvas-right").offsetHeight;
 
 // default color of brush
 context.strokeStyle = "yellow";

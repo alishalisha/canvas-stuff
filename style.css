@@ -1,10 +1,47 @@
-#canvas-container {
+* {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+#hymnal-athena {
   width: 1060px;
   height: 590px;
-  max-width: 100%;
   margin: 0 auto;
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#canvas-controls {
+  padding: 20px;
+  background: #eee;
+}
+
+#canvas-left,
+#canvas-right {
+  display: inline-block;
+  vertical-align: top;
+  width: 40%;
+}
+
+#canvas-left {
+  width: 377px;
+  height: 590px;
+  padding: 80px 40px 40px 40px;
+  background-color: #0078D7;
+  color: #fff;
+  font-size: 1.2em;
+}
+
+#canvas-left h2, p {
+  font-weight: 200;
+}
+
+#canvas-right {
+  width: 683px;
+  height: 590px;
+  max-width: 100%;
+  border: 1px solid #eee;
 }
 
 canvas {
-  border: 1px solid black;
 }
