@@ -30,13 +30,18 @@ canvasHeight = containerHeight;
 // -------------------------------
 
 $('#canvas').mousedown(function(e){
-  var mouseX = e.pageX - this.offsetLeft;
-  var mouseY = e.pageY - this.offsetTop;
-  paint = true;
-  curColor = document.getElementsByClassName("active-color")[0].dataset.color;
-  curSize = document.getElementsByClassName("active-size")[0].dataset.size;
-  addClick(mouseX, mouseY);
-  redraw();
+  if (imageStatus == 'editing') {
+    console.log('sorry you cannot edit rn');
+    return
+  } else {
+    var mouseX = e.pageX - this.offsetLeft;
+    var mouseY = e.pageY - this.offsetTop;
+    paint = true;
+    curColor = document.getElementsByClassName("active-color")[0].dataset.color;
+    curSize = document.getElementsByClassName("active-size")[0].dataset.size;
+    addClick(mouseX, mouseY);
+    redraw();
+  }
 });
 
 /* the drag and resize function may be in conflict with
@@ -82,13 +87,17 @@ var curColor = "purple";
 var paint;
 var colorTools = document.getElementsByClassName("controls__colors-color");
 var clearButton = document.getElementById("canvas-clear");
+var file = document.querySelector('input[type=file]').files[0];
 var imageStatus = image.dataset.status
 imageStatus = 'editing';
+console.log(imageStatus);
 
 if (imageStatus == 'editing') {
-  console.log("you are editing");
+  // don't allow drawing and hide drawing tools
+  $('.controls__colors').hide();
+  $('.controls__brushes').hide();
 } else {
-  console.log("image is done.");
+  // your image is set, allow drawing on top of it
 }
 
 function addClick(x, y, dragging)
@@ -141,6 +150,9 @@ function clearCanvas(){
   clickDrag = [];
   clickColor = [];
   clickSize = [];
+
+  // reset the image
+  file = null;
 }
 
 function resizeImage(){
@@ -166,19 +178,19 @@ $('.controls__brushes-size').on('click', function() {
 
 // image uploading
 function previewFile() {
-  var preview = document.querySelector('img');
-  var file    = document.querySelector('input[type=file]').files[0];
   var reader  = new FileReader();
+  file = document.querySelector('input[type=file]').files[0];
 
   reader.onloadend = function () {
     image.src = reader.result;
+    imageStatus = 'editing';
     redraw();
   }
 
   if (file) {
     reader.readAsDataURL(file);
   } else {
-    preview.src = "";
+    return
   }
 }
 

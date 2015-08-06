@@ -28,7 +28,7 @@
       <input id="image-scale" type="range" max="4" min=".01" step=".01" value="1">
     </div>
     <div class="controls__colors">
-      <a href="#" id="canvas-clear">Clear canvas</a>
+      <a href="#" id="canvas-clear">Start Over</a>
     </div>
     <div class="controls__download">
       Download image
@@ -37,9 +37,10 @@
       Drop Image Here
     </div>
     <div class="controls__image-upload">
-       or Upload Image:  <input type="file" id="upload" />
-       <div id="output"></div>
-       <img src="" />
+      or Upload Image:
+      <form id="image-form">
+        <input type="file" id="upload" />
+      </form>
     </div>
 
     <div id="hymnal-athena">
