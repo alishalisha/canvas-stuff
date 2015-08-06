@@ -8,7 +8,20 @@
   width: 1060px;
   height: 590px;
   margin: 0 auto;
+  overflow: hidden;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#canvas-prompt {
+  background: #eee;
+  width: 80%;
+  margin: 50px auto;
+  padding: 50px;
+  text-align: center;
+  font-weight: 200;
+  font-size: 1.1em;
+  color: #555;
+  border: 4px dashed #999;
 }
 
 #canvas-controls {
@@ -37,10 +50,58 @@
 }
 
 #canvas-right {
+  position: relative;
   width: 683px;
   height: 590px;
   max-width: 100%;
 }
 
-canvas {
+/* 
+*
+*
+* controls
+*
+*
+*/
+.controls__colors,
+.controls__brushes,
+.controls__scale,
+.controls__set-image,
+.controls__download {
+  display: inline-block;
+  vertical-align: top;
+  font-size: 12px;
+  margin-right: 10px;
+}
+
+.controls__title {
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.controls__colors-color {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: pink;
+  margin-right: 3px;
+}
+
+.controls__image-upload {
+  font-size: 0.75em;
+  margin-top: 40px;
+}
+
+.controls__set-image {
+  position: absolute;
+  bottom: 40px;
+  width: 100%;
+  text-align: center;
+}
+
+.controls__set-image a {
+  display: inline-block;
+  background: green;
+  padding: 10px;
 }

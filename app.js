@@ -1,5 +1,12 @@
 context = document.getElementById('canvas').getContext("2d");
 
+
+// temporary...
+$('.controls__colors-color').each(function() {
+  var color = $(this).attr('data-color');
+  $(this).css('background-color', color);
+});
+
 // -------------------------------
 //
 // set up basic canvas dimensions
@@ -9,6 +16,7 @@ context = document.getElementById('canvas').getContext("2d");
 var canvasWidth = context.canvas.width;
 var canvasHeight = context.canvas.height;
 var containerWidth = document.getElementById("canvas-right").offsetWidth;
+var leftPanelWidth = document.getElementById("canvas-left").offsetWidth;
 var athenaHeight = document.getElementById("hymnal-athena").offsetHeight;
 var toolsHeight = document.getElementById("canvas-controls").offsetHeight;
 //var containerHeight = document.getElementById("canvas-right").offsetHeight;
@@ -31,10 +39,10 @@ canvasHeight = containerHeight;
 
 $('#canvas').mousedown(function(e){
   if (imageStatus == 'editing') {
-    console.log('sorry you cannot edit rn');
+    console.log('sorry you cannot edit rn. if you are happy with your image, click "set image" up there to start drawing on it.');
     return
   } else {
-    var mouseX = e.pageX - this.offsetLeft;
+    var mouseX = (e.pageX - this.offsetLeft) - leftPanelWidth;
     var mouseY = e.pageY - this.offsetTop;
     paint = true;
     curColor = document.getElementsByClassName("active-color")[0].dataset.color;
@@ -59,7 +67,7 @@ will be disabled again and the drawing tools will be hidden again (or faded out?
 */
 
 $('#canvas').mousemove(function(e){
-  var mouseX = e.pageX - this.offsetLeft;
+  var mouseX = (e.pageX - this.offsetLeft) - leftPanelWidth;
   var mouseY = e.pageY - this.offsetTop;
   
   if(paint){
@@ -94,8 +102,8 @@ console.log(imageStatus);
 
 if (imageStatus == 'editing') {
   // don't allow drawing and hide drawing tools
-  $('.controls__colors').hide();
-  $('.controls__brushes').hide();
+  //$('.controls__colors').hide();
+  //$('.controls__brushes').hide();
 } else {
   // your image is set, allow drawing on top of it
 }
@@ -184,6 +192,7 @@ function previewFile() {
   reader.onloadend = function () {
     image.src = reader.result;
     imageStatus = 'editing';
+    $('#canvas-prompt').hide();
     redraw();
   }
 
@@ -195,5 +204,10 @@ function previewFile() {
 }
 
 document.getElementById('upload').addEventListener('change', previewFile, false);
+
+$('.controls__set-image').on('click', function() {
+  $(this).hide();
+  imageStatus = 'set';
+})
 
 // todo: image fitting, resizing, dragging and dropping, refactoring, annnnnd other things maybe
