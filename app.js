@@ -42,6 +42,7 @@ $('#canvas').mousedown(function(e){
     console.log('sorry you cannot edit rn. if you are happy with your image, click "set image" up there to start drawing on it.');
     return
   } else {
+    console.log('status is SET');
     var mouseX = (e.pageX - this.offsetLeft) - leftPanelWidth;
     var mouseY = e.pageY - this.offsetTop;
     paint = true;
@@ -161,6 +162,14 @@ function clearCanvas(){
 
   // reset the image
   file = null;
+  image = new Image();
+
+  // set image status as editing
+  imageStatus = 'editing';
+
+  // re show the prompt and set image
+  $('#canvas-prompt').show();
+  $('.controls__set-image').show();
 }
 
 function resizeImage(){
@@ -185,13 +194,12 @@ $('.controls__brushes-size').on('click', function() {
 });
 
 // image uploading
-function previewFile() {
+function uploadFile() {
   var reader  = new FileReader();
   file = document.querySelector('input[type=file]').files[0];
 
   reader.onloadend = function () {
     image.src = reader.result;
-    imageStatus = 'editing';
     $('#canvas-prompt').hide();
     redraw();
   }
@@ -203,7 +211,7 @@ function previewFile() {
   }
 }
 
-document.getElementById('upload').addEventListener('change', previewFile, false);
+document.getElementById('upload').addEventListener('change', uploadFile, false);
 
 $('.controls__set-image').on('click', function() {
   $(this).hide();
