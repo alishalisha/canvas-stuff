@@ -9,7 +9,12 @@ context = document.getElementById('canvas').getContext("2d");
 var canvasWidth = context.canvas.width;
 var canvasHeight = context.canvas.height;
 var containerWidth = document.getElementById("canvas-right").offsetWidth;
-var containerHeight = document.getElementById("canvas-right").offsetHeight;
+var athenaHeight = document.getElementById("hymnal-athena").offsetHeight;
+var toolsHeight = document.getElementById("canvas-controls").offsetHeight;
+//var containerHeight = document.getElementById("canvas-right").offsetHeight;
+
+// the container height will be the hymnal athena height minus the tools height
+var containerHeight = athenaHeight - toolsHeight;
 
 // default color of brush
 context.strokeStyle = "yellow";
@@ -83,7 +88,7 @@ function addClick(x, y, dragging)
 function redraw(){
   context.clearRect(0, 0, canvasWidth, canvasHeight); // Clears the canvas
   context.lineJoin = "round";
-  context.drawImage(image,0,0);
+  context.drawImage(image,0,0, canvasWidth, canvasHeight);
       
   for(var i=0; i < clickX.length; i++) { 
     context.strokeStyle = clickColor[i];
