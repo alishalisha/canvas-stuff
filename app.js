@@ -95,30 +95,17 @@ var clickSize = new Array();
 var curSize = "medium";
 var curColor = "purple";
 var paint;
+var imageScale = 1;
 var colorTools = document.getElementsByClassName("controls__colors-color");
 var clearButton = document.getElementById("canvas-clear");
+var embiggen = document.getElementById("embiggen");
 var fileDropZone = document.getElementById("canvas-prompt");
 var file = document.querySelector('input[type=file]').files[0];
 var imageStatus = image.dataset.status
 imageStatus = 'editing';
 
-if (imageStatus == 'editing') {
-  // don't allow drawing and hide drawing tools
-  //$('.controls__colors').hide();
-  //$('.controls__brushes').hide();
-} else {
-  // your image is set, allow drawing on top of it
-}
-
 function addClick(x, y, dragging)
 {
-  // update current color
-  //var activeColor = document.getElementsByClassName("active-color")[0].dataset.color;
-  //curColor = activeColor;
-
-  //var activeSize = document.getElementsByClassName("active-size")[0].dataset.size;
-  //curSize = activeSize;
-
   clickColor.push(curColor);
   clickSize.push(curSize);
   clickX.push(x);
@@ -127,10 +114,11 @@ function addClick(x, y, dragging)
 }
 
 function redraw(){
+  console.log('redrawing');
   context.clearRect(0, 0, canvasWidth, canvasHeight); // Clears the canvas
   $('#canvas-prompt').hide();
   context.lineJoin = "round";
-  context.drawImage(image,0,0, canvasWidth, canvasHeight);
+  context.drawImage(image, 0, 0, image.width/imageScale, image.height/imageScale, 0, 0, image.width, image.height);
       
   for(var i=0; i < clickX.length; i++) { 
     context.strokeStyle = clickColor[i];
@@ -254,6 +242,11 @@ function ParseFile(file) {
 $('.controls__set-image').on('click', function() {
   $(this).hide();
   imageStatus = 'set';
+})
+
+$('#embiggen').on('click', function() {
+  imageScale = 2;
+  redraw();
 })
 
 // todo: image fitting, resizing, dragging and dropping, refactoring, annnnnd other things maybe
