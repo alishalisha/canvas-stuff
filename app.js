@@ -129,6 +129,7 @@ function addClick(x, y, dragging)
 
 function redraw(){
   context.clearRect(0, 0, canvasWidth, canvasHeight); // Clears the canvas
+  $('#canvas-prompt').hide();
   context.lineJoin = "round";
   context.drawImage(image,0,0, canvasWidth, canvasHeight);
       
@@ -202,7 +203,6 @@ function uploadFile() {
 
   reader.onloadend = function () {
     image.src = reader.result;
-    $('#canvas-prompt').hide();
     redraw();
   }
 
@@ -221,11 +221,13 @@ fileDropZone.addEventListener("dragover", FileDragHover, false);
 fileDropZone.addEventListener("dragleave", FileDragHover, false);
 fileDropZone.addEventListener("drop", FileSelectHandler, false);
 
-// Outputting a file
-// output information
-function Output(msg) {
-  var m = document.getElementById('output');
-  m.innerHTML = msg + m.innerHTML;
+// Place image onto canvas
+function Place(image) {
+  //var m = document.getElementById('output');
+  //m.innerHTML = image + m.innerHTML;
+  console.log(image.src);
+  redraw();
+  //context.drawImage(image, 0, 0, canvasWidth, canvasHeight);
 }
 
 // file drag hover
@@ -248,12 +250,19 @@ function FileSelectHandler(e) {
 }
 
 function ParseFile(file) {
-  Output(
-    "<p>File information: <strong>" + file.name +
-    "</strong> type: <strong>" + file.type +
-    "</strong> size: <strong>" + file.size +
-    "</strong> bytes</p>"
-  );
+  // open file from drag & drop and put into canvas
+    if (file.type.indexOf("image") == 0) {
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        Place(
+          //console.log(e.target.result)
+          image.src = e.target.result
+          //"<p><strong>" + file.name + ":</strong><br />" +
+          //'<img src="' + e.target.result + '" /></p>'
+        );
+      }
+      reader.readAsDataURL(file);
+    }
 }
 
 $('.controls__set-image').on('click', function() {
