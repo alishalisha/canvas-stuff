@@ -101,7 +101,6 @@ var fileDropZone = document.getElementById("canvas-prompt");
 var file = document.querySelector('input[type=file]').files[0];
 var imageStatus = image.dataset.status
 imageStatus = 'editing';
-console.log(imageStatus);
 
 if (imageStatus == 'editing') {
   // don't allow drawing and hide drawing tools
@@ -221,15 +220,6 @@ fileDropZone.addEventListener("dragover", FileDragHover, false);
 fileDropZone.addEventListener("dragleave", FileDragHover, false);
 fileDropZone.addEventListener("drop", FileSelectHandler, false);
 
-// Place image onto canvas
-function Place(image) {
-  //var m = document.getElementById('output');
-  //m.innerHTML = image + m.innerHTML;
-  console.log(image.src);
-  redraw();
-  //context.drawImage(image, 0, 0, canvasWidth, canvasHeight);
-}
-
 // file drag hover
 function FileDragHover(e) {
   e.stopPropagation();
@@ -254,12 +244,8 @@ function ParseFile(file) {
     if (file.type.indexOf("image") == 0) {
       var reader = new FileReader();
       reader.onload = function(e) {
-        Place(
-          //console.log(e.target.result)
           image.src = e.target.result
-          //"<p><strong>" + file.name + ":</strong><br />" +
-          //'<img src="' + e.target.result + '" /></p>'
-        );
+          redraw();
       }
       reader.readAsDataURL(file);
     }
