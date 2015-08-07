@@ -97,6 +97,7 @@ var curColor = "purple";
 var paint;
 var colorTools = document.getElementsByClassName("controls__colors-color");
 var clearButton = document.getElementById("canvas-clear");
+var fileDropZone = document.getElementById("canvas-prompt");
 var file = document.querySelector('input[type=file]').files[0];
 var imageStatus = image.dataset.status
 imageStatus = 'editing';
@@ -213,6 +214,47 @@ function uploadFile() {
 }
 
 document.getElementById('upload').addEventListener('change', uploadFile, false);
+
+// drag and dropping a file
+// file drop
+fileDropZone.addEventListener("dragover", FileDragHover, false);
+fileDropZone.addEventListener("dragleave", FileDragHover, false);
+fileDropZone.addEventListener("drop", FileSelectHandler, false);
+
+// Outputting a file
+// output information
+function Output(msg) {
+  var m = document.getElementById('output');
+  m.innerHTML = msg + m.innerHTML;
+}
+
+// file drag hover
+function FileDragHover(e) {
+  e.stopPropagation();
+  e.preventDefault();
+  e.target.className = (e.type == "dragover" ? "hover" : "");
+}
+
+// file selection
+function FileSelectHandler(e) {
+  // cancel event and hover styling
+  FileDragHover(e);
+  // fetch FileList object
+  var files = e.target.files || e.dataTransfer.files;
+  // process all File objects
+  for (var i = 0, f; f = files[i]; i++) {
+    ParseFile(f);
+  }
+}
+
+function ParseFile(file) {
+  Output(
+    "<p>File information: <strong>" + file.name +
+    "</strong> type: <strong>" + file.type +
+    "</strong> size: <strong>" + file.size +
+    "</strong> bytes</p>"
+  );
+}
 
 $('.controls__set-image').on('click', function() {
   $(this).hide();

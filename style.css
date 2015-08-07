@@ -22,6 +22,11 @@
   font-size: 1.1em;
   color: #555;
   border: 4px dashed #999;
+  transition: 0.2s ease-in-out;
+}
+
+#canvas-prompt:hover {
+  background: #ccc;
 }
 
 #canvas-controls {
