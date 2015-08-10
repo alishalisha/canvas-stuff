@@ -52,10 +52,18 @@ var reader  = new FileReader();
 // -------------------------------
 
 $('#canvas').mousedown(function(e){
-  if (imageStatus != 'set') {
-    alert('Please upload an image and click "Set Image" first.')
+  if (imageStatus == null ) {
+    alert('Please upload an image first.')
+  } else if (imageStatus == 'editing') {
+    var setImage = $('.controls__set-image a');
+    setImage.addClass('bounce');
+    setImage.one('webkitAnimationEnd oanimationend msAnimationEnd animationend',   
+      function(e) {
+        console.log('animation has ended');
+        setImage.removeClass('bounce');
+      });
   } else {
-    var mouseX = e.pageX - 500;
+    var mouseX = e.pageX - leftPanelWidth - 3;
     var mouseY = e.pageY - this.offsetTop;
     paint = true;
     curColor = document.getElementsByClassName("active-color")[0].dataset.color;
@@ -66,7 +74,7 @@ $('#canvas').mousedown(function(e){
 });
 
 $('#canvas').mousemove(function(e){
-  var mouseX = e.pageX - 500;
+  var mouseX = e.pageX - leftPanelWidth - 3;
   var mouseY = e.pageY - this.offsetTop;
   
   if (paint){
