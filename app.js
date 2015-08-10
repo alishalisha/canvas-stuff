@@ -118,7 +118,7 @@ function redraw(){
   context.clearRect(0, 0, canvasWidth, canvasHeight); // Clears the canvas
   $('#canvas-prompt').hide();
   context.lineJoin = "round";
-  context.drawImage(image, 0, 0, image.width/imageScale, image.height/imageScale, 0, 0, image.width, image.height);
+  context.drawImage(image, 0, 0, image.width/imageScale, image.height/imageScale, 0, 0, image.width * imageScale, image.height * imageScale);
       
   for(var i=0; i < clickX.length; i++) { 
     context.strokeStyle = clickColor[i];
@@ -244,9 +244,15 @@ $('.controls__set-image').on('click', function() {
   imageStatus = 'set';
 })
 
-$('#embiggen').on('click', function() {
-  imageScale = 2;
-  redraw();
+// Image scaling
+// move *all* these event handlers to within a if (file) ?
+$('#image-scale').on('change', function() {
+  if (file) {
+    imageScale = $(this).val();
+    redraw();
+  } else {
+    alert('Please upload and set an image first.')
+  }
 })
 
 // todo: image fitting, resizing, dragging and dropping, refactoring, annnnnd other things maybe
