@@ -31,7 +31,7 @@ var clickDrag = new Array();
 var clickColor = new Array();
 var clickSize = new Array();
 var curSize = "medium";
-var curColor = "purple";
+var curColor = "#6BDDFF";
 var paint;
 var imageScale = 1;
 var colorTools = document.getElementsByClassName("controls__colors-color");
@@ -52,11 +52,10 @@ var reader  = new FileReader();
 // -------------------------------
 
 $('#canvas').mousedown(function(e){
-  if (imageStatus == 'editing') {
+  if (imageStatus != 'set') {
     alert('Please upload an image and click "Set Image" first.')
-    return
   } else {
-    var mouseX = e.pageX - this.offsetLeft;
+    var mouseX = e.pageX - 500;
     var mouseY = e.pageY - this.offsetTop;
     paint = true;
     curColor = document.getElementsByClassName("active-color")[0].dataset.color;
@@ -67,7 +66,7 @@ $('#canvas').mousedown(function(e){
 });
 
 $('#canvas').mousemove(function(e){
-  var mouseX = e.pageX - this.offsetLeft;
+  var mouseX = e.pageX - 500;
   var mouseY = e.pageY - this.offsetTop;
   
   if (paint){
@@ -129,6 +128,9 @@ function uploadFile() {
     imageStatus = 'editing';
     image.src = reader.result;
     redraw();
+
+    // show set image
+    $('.controls__set-image').fadeIn();
   }
 
   if (file) {
@@ -161,7 +163,11 @@ function ParseFile(file) {
       var reader = new FileReader();
       reader.onload = function(e) {
           image.src = e.target.result
+          imageStatus = 'editing';
           redraw();
+
+          // show set image
+          $('.controls__set-image').fadeIn();
       }
       reader.readAsDataURL(file);
     }
@@ -186,7 +192,8 @@ function clearCanvas(){
 
     // re-show the prompt and set image button
     $('#canvas-prompt').show();
-    $('.controls__set-image').show();
+    $('.controls__set-image').hide();
+    $('.controls__scale').show();
   } else {
     alert("Woops, try uploading an image first.");
   }
@@ -203,13 +210,18 @@ function changeBrushSize() {
 }
 
 function setImage() {
-  $(this).hide();
+  $(this).fadeOut();
+  $('.controls__scale').fadeOut();
   imageStatus = 'set';
 }
 
 function scaleImage() {
-  imageScale = $(this).val();
-  redraw();
+  if (imageStatus == null) {
+    alert('Please upload an image first.');
+  } else {
+    imageScale = $(this).val();
+    redraw();
+  }
 }
 
 function downloadCanvas() {
@@ -219,7 +231,7 @@ function downloadCanvas() {
     this.href = dt;
     this.download = 'drawing.png';
   } else {
-    return
+    alert('Upload and draw on an image first.');
   }
 };
 
@@ -255,6 +267,8 @@ fileDropZone.addEventListener("drop", FileSelectHandler, false);
 //
 //
 // -------------------------------
+
+$('.controls__set-image').hide();
 
 $('.controls__colors-color').each(function() {
   var color = $(this).attr('data-color');

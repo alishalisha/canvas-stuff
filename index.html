@@ -17,26 +17,29 @@
         <p>Note-taking right in your browser.</p>
       </div><div id="canvas-right">
         <div id="canvas-controls">
+          <div class="controls__scale">
+            <div class="controls__title">Resize image</div>
+            <input id="image-scale" type="range" max="3" min=".01" step=".01" value="1">
+          </div>
           <div class="controls__colors">
             <div class="controls__title">Colors</div>
             <a href="#" class="controls__colors-color active-color" data-color="red"></a>
-            <a href="#" class="controls__colors-color" data-color="purple"></a>
+            <a href="#" class="controls__colors-color" data-color="#6BDDFF"></a>
             <a href="#" class="controls__colors-color" data-color="yellow"></a>
           </div>
           <div class="controls__brushes">
             <div class="controls__title">Brush size</div>
-            <a href="#" class="controls__brushes-size" data-size="3">Small</a>
-            <a href="#" class="controls__brushes-size active-size" data-size="5">Medium</a>
-            <a href="#" class="controls__brushes-size" data-size="10">Large</a>
-          </div>
-          <div class="controls__scale">
-            <div class="controls__title">Resize image</div>
-            <input id="image-scale" type="range" max="3" min=".01" step=".01" value="1">
+            <a href="#" class="controls__brushes-size" data-size="3"></a>
+            <a href="#" class="controls__brushes-size active-size" data-size="5"></a>
+            <a href="#" class="controls__brushes-size" data-size="10"></a>
           </div>
           <div class="controls__download">
             <a href="#" id="download-image">Download Image</a><br />
             <a href="#" id="canvas-clear">or Start Over</a>
           </div>
+        </div>
+        <div class="controls__set-image">
+          <a href="#">Done resizing image?</a>
         </div>
         <div id="canvas-prompt">
           Drop an image here or upload one to start annotating and drawing.
@@ -46,9 +49,6 @@
               <input type="file" id="upload" />
             </form>
           </div>
-        </div>
-        <div class="controls__set-image">
-          <a href="#">Set Image</a>
         </div>
         <canvas id="canvas" width="683" height="590"></canvas>
       </div>
