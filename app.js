@@ -19,7 +19,6 @@ var containerWidth = document.getElementById("canvas-right").offsetWidth;
 var leftPanelWidth = document.getElementById("canvas-left").offsetWidth;
 var athenaHeight = document.getElementById("hymnal-athena").offsetHeight;
 var toolsHeight = document.getElementById("canvas-controls").offsetHeight;
-//var containerHeight = document.getElementById("canvas-right").offsetHeight;
 
 // the container height will be the hymnal athena height minus the tools height
 var containerHeight = athenaHeight - toolsHeight;
@@ -40,10 +39,8 @@ canvasHeight = containerHeight;
 $('#canvas').mousedown(function(e){
   if (imageStatus == 'editing') {
     alert('Please upload an image and click "Set Image" first.')
-    // TODO: Split this into 'please upload an image' and 'please set image' alerts
     return
   } else {
-    console.log('status is SET');
     var mouseX = e.pageX - this.offsetLeft;
     var mouseY = e.pageY - this.offsetTop;
     paint = true;
@@ -54,25 +51,11 @@ $('#canvas').mousedown(function(e){
   }
 });
 
-/* the drag and resize function may be in conflict with
-the 'mousedown' and dragging function we have for drawing.
-therefore....
-we need to have two separate things happening:
-1) user is ONLY SHOWN the "drop an image here" or "upload an image"
-prompt
-2) then they can drag and resize/scale the image to how they want.
-3) then they can set the status of the image to "done" if they're happy with it.
-4) only if the status of the image is "done" can the other canvas mousedown function up there be
-called. then the drawing controls will be shown.
-5) if the status of the image is switched back to "editing" then the canvas mousedown function for drawing
-will be disabled again and the drawing tools will be hidden again (or faded out?). :|
-*/
-
 $('#canvas').mousemove(function(e){
   var mouseX = e.pageX - this.offsetLeft;
   var mouseY = e.pageY - this.offsetTop;
   
-  if(paint){
+  if (paint){
     addClick(mouseX, mouseY, true);
     redraw();
   }
@@ -100,7 +83,7 @@ var colorTools = document.getElementsByClassName("controls__colors-color");
 var clearButton = document.getElementById("canvas-clear");
 var embiggen = document.getElementById("embiggen");
 var fileDropZone = document.getElementById("canvas-prompt");
-var file = document.querySelector('input[type=file]').files[0];
+var file = null;
 var imageStatus = image.dataset.status
 imageStatus = 'editing';
 
@@ -114,7 +97,6 @@ function addClick(x, y, dragging)
 }
 
 function redraw(){
-  console.log('redrawing');
   context.clearRect(0, 0, canvasWidth, canvasHeight); // Clears the canvas
   $('#canvas-prompt').hide();
   context.lineJoin = "round";
@@ -137,9 +119,10 @@ function redraw(){
 
 // -------------------------------
 //
-// tools functions
+// Clearing the canvas
 //
 // -------------------------------
+
 function clearCanvas(){
   context.clearRect(0, 0, canvasWidth, canvasHeight);
 
@@ -157,33 +140,17 @@ function clearCanvas(){
   // set image status as editing
   imageStatus = 'editing';
 
-  // re show the prompt and set image
+  // re-show the prompt and set image button
   $('#canvas-prompt').show();
   $('.controls__set-image').show();
 }
 
-function resizeImage(){
-
-}
-
 // -------------------------------
 //
-// call tools functions
+//  Image uploading
 //
 // -------------------------------
-clearButton.onclick = clearCanvas;
 
-$('.controls__colors-color').on('click', function() {
-  $('.controls__colors-color').removeClass('active-color');
-  $(this).addClass('active-color');
-});
-
-$('.controls__brushes-size').on('click', function() {
-  $('.controls__brushes-size').removeClass('active-size');
-  $(this).addClass('active-size');
-});
-
-// image uploading
 function uploadFile() {
   var reader  = new FileReader();
   file = document.querySelector('input[type=file]').files[0];
@@ -203,7 +170,6 @@ function uploadFile() {
 document.getElementById('upload').addEventListener('change', uploadFile, false);
 
 // drag and dropping a file
-// file drop
 fileDropZone.addEventListener("dragover", FileDragHover, false);
 fileDropZone.addEventListener("dragleave", FileDragHover, false);
 fileDropZone.addEventListener("drop", FileSelectHandler, false);
@@ -242,30 +208,67 @@ function ParseFile(file) {
 $('.controls__set-image').on('click', function() {
   $(this).hide();
   imageStatus = 'set';
-})
+});
 
-// Image scaling
-// move *all* these event handlers to within a if (file) ?
-$('#image-scale').on('change', function() {
-  if (file) {
+// -------------------------------
+//
+//
+// Event listeners
+//
+//
+// -------------------------------
+
+// There are three states:
+// 1. file = 'loaded'
+// 2. file = 'set'
+// 3. file = null
+
+// 1. if file is loaded, allow scaling
+
+// 2. if file is set, allow drawing
+
+// 3. if file is null, show alert
+
+// -------------------------------
+//
+//
+// Functions
+//
+//
+// -------------------------------
+
+clearButton.onclick = clearCanvas;
+
+$('.controls__colors-color').on('click', function() {
+  $('.controls__colors-color').removeClass('active-color');
+  $(this).addClass('active-color');
+});
+
+$('.controls__brushes-size').on('click', function() {
+  $('.controls__brushes-size').removeClass('active-size');
+  $(this).addClass('active-size');
+});
+
+function scaleImage() {
+  $('#image-scale').on('change', function() {
     imageScale = $(this).val();
     redraw();
-  } else {
-    alert('Please upload and set an image first.')
-  }
-})
+  })
+}
 
-// Downloading the image
-// TODO: move this global c elsewhere
+scaleImage();
+
 var c = document.getElementById('canvas');
 var dl = document.getElementById('download-image');
 
+dl.addEventListener('click', downloadCanvas, false);
+
 function downloadCanvas() {
+  if (file && imageStatus == 'set') {
     var dt = c.toDataURL('image/png');
     this.href = dt;
     this.download = 'drawing.png';
+  } else {
+    return
+  }
 };
-
-dl.addEventListener('click', downloadCanvas, false);
-
-// todo: image fitting, resizing, dragging and dropping, refactoring, annnnnd other things maybe
