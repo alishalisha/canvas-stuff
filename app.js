@@ -40,7 +40,7 @@ canvasHeight = containerHeight;
 $('#canvas').mousedown(function(e){
   if (imageStatus == 'editing') {
     alert('Please upload an image and click "Set Image" first.')
-    //console.log('sorry you cannot edit rn. if you are happy with your image, click "set image" up there to start drawing on it.');
+    // TODO: Split this into 'please upload an image' and 'please set image' alerts
     return
   } else {
     console.log('status is SET');
@@ -254,5 +254,18 @@ $('#image-scale').on('change', function() {
     alert('Please upload and set an image first.')
   }
 })
+
+// Downloading the image
+// TODO: move this global c elsewhere
+var c = document.getElementById('canvas');
+var dl = document.getElementById('download-image');
+
+function downloadCanvas() {
+    var dt = c.toDataURL('image/png');
+    this.href = dt;
+    this.download = 'drawing.png';
+};
+
+dl.addEventListener('click', downloadCanvas, false);
 
 // todo: image fitting, resizing, dragging and dropping, refactoring, annnnnd other things maybe
