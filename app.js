@@ -1,17 +1,11 @@
+// -------------------------------
+//
+//
+// Global variables
+//
+//
+// -------------------------------
 context = document.getElementById('canvas').getContext("2d");
-
-
-// temporary...
-$('.controls__colors-color').each(function() {
-  var color = $(this).attr('data-color');
-  $(this).css('background-color', color);
-});
-
-// -------------------------------
-//
-// set up basic canvas dimensions
-//
-// -------------------------------
 
 var canvasWidth = context.canvas.width;
 var canvasHeight = context.canvas.height;
@@ -30,9 +24,30 @@ context.strokeStyle = "yellow";
 canvasWidth = containerWidth;
 canvasHeight = containerHeight;
 
+var image = new Image();
+var clickX = new Array();
+var clickY = new Array();
+var clickDrag = new Array();
+var clickColor = new Array();
+var clickSize = new Array();
+var curSize = "medium";
+var curColor = "purple";
+var paint;
+var imageScale = 1;
+var colorTools = document.getElementsByClassName("controls__colors-color");
+var clearButton = document.getElementById("canvas-clear");
+var embiggen = document.getElementById("embiggen");
+var fileDropZone = document.getElementById("canvas-prompt");
+var file = null;
+var imageStatus = image.dataset.status
+imageStatus = null;
+var reader  = new FileReader();
+
 // -------------------------------
 //
-// set up basic drawing functions
+//
+// Basic drawing events and functions
+//
 //
 // -------------------------------
 
@@ -69,24 +84,6 @@ $('#canvas').mouseleave(function(e){
   paint = false;
 });
 
-var image = new Image();
-var clickX = new Array();
-var clickY = new Array();
-var clickDrag = new Array();
-var clickColor = new Array();
-var clickSize = new Array();
-var curSize = "medium";
-var curColor = "purple";
-var paint;
-var imageScale = 1;
-var colorTools = document.getElementsByClassName("controls__colors-color");
-var clearButton = document.getElementById("canvas-clear");
-var embiggen = document.getElementById("embiggen");
-var fileDropZone = document.getElementById("canvas-prompt");
-var file = null;
-var imageStatus = image.dataset.status
-imageStatus = 'editing';
-
 function addClick(x, y, dragging)
 {
   clickColor.push(curColor);
@@ -119,43 +116,17 @@ function redraw(){
 
 // -------------------------------
 //
-// Clearing the canvas
 //
-// -------------------------------
-
-function clearCanvas(){
-  context.clearRect(0, 0, canvasWidth, canvasHeight);
-
-  // empty the points arrays and other arrays
-  clickX = [];
-  clickY = [];
-  clickDrag = [];
-  clickColor = [];
-  clickSize = [];
-
-  // reset the image
-  file = null;
-  image = new Image();
-
-  // set image status as editing
-  imageStatus = 'editing';
-
-  // re-show the prompt and set image button
-  $('#canvas-prompt').show();
-  $('.controls__set-image').show();
-}
-
-// -------------------------------
+// UI Functions
 //
-//  Image uploading
 //
 // -------------------------------
 
 function uploadFile() {
-  var reader  = new FileReader();
   file = document.querySelector('input[type=file]').files[0];
 
   reader.onloadend = function () {
+    imageStatus = 'editing';
     image.src = reader.result;
     redraw();
   }
@@ -167,21 +138,12 @@ function uploadFile() {
   }
 }
 
-document.getElementById('upload').addEventListener('change', uploadFile, false);
-
-// drag and dropping a file
-fileDropZone.addEventListener("dragover", FileDragHover, false);
-fileDropZone.addEventListener("dragleave", FileDragHover, false);
-fileDropZone.addEventListener("drop", FileSelectHandler, false);
-
-// file drag hover
 function FileDragHover(e) {
   e.stopPropagation();
   e.preventDefault();
   e.target.className = (e.type == "dragover" ? "hover" : "");
 }
 
-// file selection
 function FileSelectHandler(e) {
   // cancel event and hover styling
   FileDragHover(e);
@@ -205,10 +167,61 @@ function ParseFile(file) {
     }
 }
 
-$('.controls__set-image').on('click', function() {
+function clearCanvas(){
+  if (imageStatus != null) {
+    context.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    // empty the points arrays and other arrays
+    clickX = [];
+    clickY = [];
+    clickDrag = [];
+    clickColor = [];
+    clickSize = [];
+
+    // reset the image
+    $('#upload').val(null);
+    file = null;
+    image = new Image();
+    imageStatus = null;
+
+    // re-show the prompt and set image button
+    $('#canvas-prompt').show();
+    $('.controls__set-image').show();
+  } else {
+    alert("Woops, try uploading an image first.");
+  }
+}
+
+function activateColor() {
+  $('.controls__colors-color').removeClass('active-color');
+  $(this).addClass('active-color');
+}
+
+function changeBrushSize() {
+  $('.controls__brushes-size').removeClass('active-size');
+  $(this).addClass('active-size');
+}
+
+function setImage() {
   $(this).hide();
   imageStatus = 'set';
-});
+}
+
+function scaleImage() {
+  imageScale = $(this).val();
+  redraw();
+}
+
+function downloadCanvas() {
+  var c = document.getElementById('canvas');
+  if (imageStatus == 'set') {
+    var dt = c.toDataURL('image/png');
+    this.href = dt;
+    this.download = 'drawing.png';
+  } else {
+    return
+  }
+};
 
 // -------------------------------
 //
@@ -219,56 +232,31 @@ $('.controls__set-image').on('click', function() {
 // -------------------------------
 
 // There are three states:
-// 1. file = 'loaded'
-// 2. file = 'set'
-// 3. file = null
-
-// 1. if file is loaded, allow scaling
-
-// 2. if file is set, allow drawing
-
-// 3. if file is null, show alert
-
-// -------------------------------
-//
-//
-// Functions
-//
-//
-// -------------------------------
+// 1. imageStatus = 'editing' = Image has been uploaded and ready for resizing.
+// 2. imageStatus = 'set' = Image has been set and ready for drawing.
+// 3. imageStatus = null = There is no image.
 
 clearButton.onclick = clearCanvas;
+$('.controls__colors-color').on('click', activateColor);
+$('.controls__brushes-size').on('click', changeBrushSize);
+$('.controls__set-image').on('click', setImage);
+$('#image-scale').on('change', scaleImage);
+$('#download-image').on('click', downloadCanvas);
+$('#upload').on('change', uploadFile);
+fileDropZone.addEventListener("dragover", FileDragHover, false);
+fileDropZone.addEventListener("dragleave", FileDragHover, false);
+fileDropZone.addEventListener("drop", FileSelectHandler, false);
 
-$('.controls__colors-color').on('click', function() {
-  $('.controls__colors-color').removeClass('active-color');
-  $(this).addClass('active-color');
+
+// -------------------------------
+//
+//
+// Init
+//
+//
+// -------------------------------
+
+$('.controls__colors-color').each(function() {
+  var color = $(this).attr('data-color');
+  $(this).css('background-color', color);
 });
-
-$('.controls__brushes-size').on('click', function() {
-  $('.controls__brushes-size').removeClass('active-size');
-  $(this).addClass('active-size');
-});
-
-function scaleImage() {
-  $('#image-scale').on('change', function() {
-    imageScale = $(this).val();
-    redraw();
-  })
-}
-
-scaleImage();
-
-var c = document.getElementById('canvas');
-var dl = document.getElementById('download-image');
-
-dl.addEventListener('click', downloadCanvas, false);
-
-function downloadCanvas() {
-  if (file && imageStatus == 'set') {
-    var dt = c.toDataURL('image/png');
-    this.href = dt;
-    this.download = 'drawing.png';
-  } else {
-    return
-  }
-};
