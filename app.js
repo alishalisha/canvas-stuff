@@ -63,7 +63,7 @@ $('#canvas').mousedown(function(e){
         setImage.removeClass('bounce');
       });
   } else {
-    var mouseX = e.pageX - leftPanelWidth - 3;
+    var mouseX = e.pageX - this.offsetLeft;
     var mouseY = e.pageY - this.offsetTop;
     paint = true;
     addClick(mouseX, mouseY);
@@ -72,7 +72,7 @@ $('#canvas').mousedown(function(e){
 });
 
 $('#canvas').mousemove(function(e){
-  var mouseX = e.pageX - leftPanelWidth - 3;
+  var mouseX = e.pageX - this.offsetLeft;
   var mouseY = e.pageY - this.offsetTop;
   
   if (paint){
@@ -302,3 +302,4 @@ $('.controls__colors-color').each(function() {
   var color = $(this).attr('data-color');
   $(this).css('background-color', color);
 });
+
