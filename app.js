@@ -278,8 +278,6 @@ updateCurrentTool = function(chosenValue, tool) {
 // 3. imageStatus = null = There is no image.
 
 clearButton.onclick = clearCanvas;
-// $('.controls__colors-color').on('click', activateColor);
-// $('.controls__brushes-size').on('click', changeBrushSize);
 $('.controls__set-image a').on('click', setImage);
 $('#image-scale').on('change', scaleImage);
 $('#download-image').on('click', downloadCanvas);
@@ -299,8 +297,6 @@ controls.click(function(event) {
 //
 //
 // -------------------------------
-
-//$('.controls__set-image').hide();
 
 $('.controls__colors-color').each(function() {
   var color = $(this).attr('data-color');
