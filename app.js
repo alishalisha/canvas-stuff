@@ -30,7 +30,7 @@ var clickY = new Array();
 var clickDrag = new Array();
 var clickColor = new Array();
 var clickSize = new Array();
-var curSize = "medium";
+var curSize = 5;
 var curColor = "#6BDDFF";
 var paint;
 var imageScale = 1;
@@ -60,15 +60,12 @@ $('#canvas').mousedown(function(e){
     setImage.addClass('bounce');
     setImage.one('webkitAnimationEnd oanimationend msAnimationEnd animationend',   
       function(e) {
-        console.log('animation has ended');
         setImage.removeClass('bounce');
       });
   } else {
     var mouseX = e.pageX - leftPanelWidth - 3;
     var mouseY = e.pageY - this.offsetTop;
     paint = true;
-    curColor = document.getElementsByClassName("active-color")[0].dataset.color;
-    curSize = document.getElementsByClassName("active-size")[0].dataset.size;
     addClick(mouseX, mouseY);
     redraw();
   }
@@ -247,11 +244,23 @@ function downloadCanvas() {
 activateTool = function(tool) {
    var target = $(event.target);
    var activeClass = 'active-'+tool;
+   var chosenValue = target[0].dataset[tool];
    if (target.is('a')) {
      target.addClass(activeClass).siblings().removeClass(activeClass);
+     updateCurrentTool(chosenValue, tool);
    } else {
      return
    }
+}
+
+updateCurrentTool = function(chosenValue, tool) {
+  if (tool == 'size') {
+    curSize = chosenValue;
+  } else if (tool == 'color') {
+    curColor = chosenValue;
+  } else {
+    return
+  }
 }
 
 // -------------------------------
