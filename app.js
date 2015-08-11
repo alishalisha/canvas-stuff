@@ -42,6 +42,7 @@ var file = null;
 var imageStatus = image.dataset.status
 imageStatus = null;
 var reader  = new FileReader();
+var controls = $('#canvas-controls');
 
 // -------------------------------
 //
@@ -243,6 +244,16 @@ function downloadCanvas() {
   }
 };
 
+activateTool = function(tool) {
+   var target = $(event.target);
+   var activeClass = 'active-'+tool;
+   if (target.is('a')) {
+     target.addClass(activeClass).siblings().removeClass(activeClass);
+   } else {
+     return
+   }
+}
+
 // -------------------------------
 //
 //
@@ -257,8 +268,8 @@ function downloadCanvas() {
 // 3. imageStatus = null = There is no image.
 
 clearButton.onclick = clearCanvas;
-$('.controls__colors-color').on('click', activateColor);
-$('.controls__brushes-size').on('click', changeBrushSize);
+// $('.controls__colors-color').on('click', activateColor);
+// $('.controls__brushes-size').on('click', changeBrushSize);
 $('.controls__set-image').on('click', setImage);
 $('#image-scale').on('change', scaleImage);
 $('#download-image').on('click', downloadCanvas);
@@ -266,6 +277,9 @@ $('#upload').on('change', uploadFile);
 fileDropZone.addEventListener("dragover", FileDragHover, false);
 fileDropZone.addEventListener("dragleave", FileDragHover, false);
 fileDropZone.addEventListener("drop", FileSelectHandler, false);
+controls.click(function(event) {
+   activateTool(Object.keys(event.target.dataset));
+});
 
 
 // -------------------------------
