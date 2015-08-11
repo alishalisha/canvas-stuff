@@ -55,7 +55,7 @@
 }
 
 #canvas-right {
-  position: relative;
+  /*position: relative;*/
   width: 683px;
   height: 590px;
   max-width: 100%;
@@ -112,6 +112,11 @@
   height: 18px;
 }
 
+.controls__colors {
+  border-left: 1px solid #ccc;
+  padding-left: 10px;
+}
+
 .controls__colors-color {
   display: inline-block;
   width: 20px;
@@ -127,11 +132,11 @@
 }
 
 .controls__set-image {
-  position: absolute;
+/*  position: absolute;
   z-index: 1;
   top: 100px;
   left: 10px;
-  width: 100%;
+  width: 100%;*/
 }
 
 .controls__set-image a {
@@ -159,6 +164,15 @@
 
 .controls__set-image a:hover {
   background: rgba(255, 255, 255, 0.9);
+}
+
+.controls__scale.set {
+  color: #ccc;
+}
+
+.controls__set-image.set a {
+  color: #ccc;
+  background: #eee;
 }
 
 .controls__download {

@@ -216,8 +216,9 @@ function changeBrushSize() {
 }
 
 function setImage() {
-  $(this).fadeOut();
+  //$(this).fadeOut();
   $('.controls__scale').fadeOut();
+  $('.controls__set-image').addClass('set');
   imageStatus = 'set';
 }
 
@@ -279,7 +280,7 @@ updateCurrentTool = function(chosenValue, tool) {
 clearButton.onclick = clearCanvas;
 // $('.controls__colors-color').on('click', activateColor);
 // $('.controls__brushes-size').on('click', changeBrushSize);
-$('.controls__set-image').on('click', setImage);
+$('.controls__set-image a').on('click', setImage);
 $('#image-scale').on('change', scaleImage);
 $('#download-image').on('click', downloadCanvas);
 $('#upload').on('change', uploadFile);
@@ -299,7 +300,7 @@ controls.click(function(event) {
 //
 // -------------------------------
 
-$('.controls__set-image').hide();
+//$('.controls__set-image').hide();
 
 $('.controls__colors-color').each(function() {
   var color = $(this).attr('data-color');
