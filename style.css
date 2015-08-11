@@ -55,19 +55,13 @@
 }
 
 #canvas-right {
-  /*position: relative;*/
+  border-right: 1px solid #eee;
+  border-bottom: 1px solid #eee;
   width: 683px;
   height: 590px;
   max-width: 100%;
 }
 
-/* 
-*
-*
-* controls
-*
-*
-*/
 .controls__colors,
 .controls__brushes,
 .controls__scale,
@@ -129,14 +123,6 @@
 .controls__image-upload {
   font-size: 0.75em;
   margin-top: 40px;
-}
-
-.controls__set-image {
-/*  position: absolute;
-  z-index: 1;
-  top: 100px;
-  left: 10px;
-  width: 100%;*/
 }
 
 .controls__set-image a {
